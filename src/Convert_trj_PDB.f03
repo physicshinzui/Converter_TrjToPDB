@@ -1,10 +1,11 @@
 module Convert_trj_PDB 
   implicit none
 
-  public read_pdb
-  public readtrj
+  public  read_pdb
+  public  readtrj
   private outputPDB
 
+  !***Should I convert the follow variables to type ones?
   integer                       :: iatom, n_atoms, n_residues, n_chains
   integer         , allocatable :: AtomNum(:)
   character(len=4), allocatable :: AtomName(:)
@@ -80,11 +81,6 @@ contains
       iconf = 0; trj_x(:) = 0; trj_y(:) = 0; trj_z(:) = 0
       
       !***Reading trajectory
-      !@@@@tmp
-      !n_residues = 40; n_chains = 2
-      !cellsize = (/ 44.00368, 44.00368, 44.00368 /)
-      !@@@
-
       call prepare_apply_PBC(n_atoms,ResNum,n_residues)
       do 
           read(unit, end=111) istp,sitime,sec,et,kinetic,temperature,&

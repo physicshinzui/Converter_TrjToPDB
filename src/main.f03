@@ -1,10 +1,7 @@
 program main
     use Convert_trj_PDB !,only : read_pdb, readtrj 
     implicit none
-    integer :: icrd
     real(8) :: t1, t2
-!    integer :: n_atoms, n_residues, n_chains
-!    real(8) :: cellsize(3)
     character(len=100) :: file_ref 
     character(len=100) :: file_trj
 

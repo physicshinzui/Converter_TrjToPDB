@@ -1,24 +1,9 @@
-!***************************************************************
-!This program is needed to obtain correct protein conformations
-!when periodic boundary condition is used in simulation.
-!
-!Algorithm:
-!If the distance between adjacent atom is larger than a box side, 
-!the atom goes beyond the box side.Thus the atom is needed to return an appropiate position.
-!
-!README: 
-!tot_atms is the number of total atoms of a system.
-!x, y and z are coordinate of a system.
-!xcell, ycell and zcell are box size of a system.
-!n_atoms is array size of these
-! Memo:
-! rdiff / xcell < 1 absolutely
-!***************************************************************
 module apply_PBC 
   implicit none
-  integer :: i  
-  integer, allocatable :: first_atom(:)
-  integer, allocatable :: last_atom(:)
+  logical, private :: IfUsed !judge if prepare_apply_PBC has used before ReturnAtom.
+  integer, private :: i  
+  integer, private, allocatable :: first_atom(:)
+  integer, private, allocatable :: last_atom(:)
 contains
 
   subroutine prepare_apply_PBC(n_atoms, residue_numbers, n_residues) 
@@ -36,6 +21,7 @@ contains
       endif
     enddo
     last_atom(residue_numbers(i-1)) = i - 1
+    IfUsed = .true.
   end subroutine
 
 
@@ -51,7 +37,9 @@ contains
     real(4), intent(inout) :: codx(n_atoms), cody(n_atoms), codz(n_atoms)
     real(4) :: rdiff
     double precision, intent(in) :: cellsize(3) 
-
+    if (IfUsed .neqv. .true.) then 
+      stop "subroutine, prepare_apply_PBC, has not used yet before subroutine, ReturnAtom."
+    endif
   !*****************************************************
   !Move atoms at each residues if atoms go beyond a box.
   !*****************************************************
@@ -78,9 +66,6 @@ contains
       enddo
 
       !***Detection of non-protoruded residue Number
-      !forall (i = 1:3, imove(i) == 0) NonProtorudedResidueNo = iresidue 
-
-      !judge = any(imove == 1 ) !If any of imove components are 1, return true.
       judge = all(imove == 0 ) !If all of imove components are 0, return true. 
       if (judge .eqv. .true.) then 
         NonProtorudedResidueNo = iresidue 
@@ -90,20 +75,25 @@ contains
     enddo
 
   
-  !*****************************************************
-  !Move residue if a entire residue goes beyond a box.
-  !*****************************************************
-    !**For ET1
+    !*****************************************************
+    !Move residue if a entire residue goes beyond a box.
+    !*****************************************************
     !Landmark residues must be specified 
     !on the basis of the residues of previous conformation
     !which did not go beyond a box.
-    ilandmark(1) = 5
-    ilandmark(2) = NonProtorudedResidueNo
-    !ilandmark(2) = 22
+
+    !***peptide system only 
+    ilandmark(1)   = NonProtorudedResidueNo
     iChainStart(1) = 1 
-    iChainStart(2) = 21 
-    iChainEnd(1) = 20
-    iChainEnd(2) = 40
+    iChainEnd(1)   = n_residues 
+
+    !**For ET1
+    !ilandmark(1) = 5
+    !ilandmark(2) = NonProtorudedResidueNo
+    !iChainStart(1) = 1 
+    !iChainStart(2) = 21 
+    !iChainEnd(1) = 20
+    !iChainEnd(2) = 40
     
     !***new
     imove(:) = 0
