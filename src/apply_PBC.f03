@@ -27,7 +27,7 @@ contains
 
   subroutine ReturnAtom(n_atoms, nchain,n_residues,codx,cody,codz,cellsize)
     logical :: judge
-    integer :: iresidue, j, jj, k, kk, n_residues
+    integer :: iresidue, jj, n_residues
     integer :: imove(3)
     integer :: NonProtorudedResidueNo
     integer :: iatmst, iatmen
@@ -40,6 +40,9 @@ contains
     if (IfUsed .neqv. .true.) then 
       stop "subroutine, prepare_apply_PBC, has not used yet before subroutine, ReturnAtom."
     endif
+
+    !***Initialize
+    ilandmark(:)=0; iChainStart(:)=0; iChainEnd(:)=0
   !*****************************************************
   !Move atoms at each residues if atoms go beyond a box.
   !*****************************************************

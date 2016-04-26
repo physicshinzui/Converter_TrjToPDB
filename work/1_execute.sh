@@ -1,2 +1,2 @@
 #!/bin/bash
-../src/hoge.exe < para01.inp
+../src/converter < para01.inp

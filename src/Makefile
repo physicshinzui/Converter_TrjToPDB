@@ -1,16 +1,31 @@
 FC=gfortran
+#CFLAGS = -Wall -O2
 
-OBJS= main.o
+OBJS = variables.o \
+       apply_pbc.o \
+       convert_trj_pdb.o \
+       main.o 
 
-MODS=apply_pbc.mod convert_trj_pdb.mod
+EXEC = converter
 
-.SUFFIXES:.o .f03
-.f03.o:
-	$(FC) -c $< $(OBJS)
-.SUFFIXES:.mod.f03
-.f03.mod:
-	$(FC) -c $< $(MODS)
+all: $(EXEC) 
 
-$(TARGET):$(OBJS)
+variables.o:  variables.f03
+	$(FC) -c variables.f03
+apply_pbc.o:  apply_pbc.f03
+	$(FC) -c apply_pbc.f03
+convert_trj_pdb.o: convert_trj_pdb.f03
+	$(FC) -c convert_trj_pdb.f03
+main.o: main.f03
+	$(FC) -c main.f03 
+
+#.f03.o:
+#	$(FC) -c $< $(OBJS)
+
+$(EXEC):$(OBJS)
 	$(FC) -o $@ $(OBJS)
+
+.PHONY:clean
+clean:
+	rm *.o *.mod
 

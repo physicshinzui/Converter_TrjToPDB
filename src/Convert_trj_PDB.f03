@@ -14,8 +14,8 @@ contains
     character(len=6)   :: atom
     integer, parameter :: FilUnit = 11
     integer, parameter :: OutPDBUnit  = 12
-    integer :: i, ios, ter 
-    integer :: NotAtomLine,NumAtom 
+    integer :: i
+    integer :: NotAtomLine
   
     open(FilUnit, file=FilName, status="old")
     print*,"  File Name: ",FilName
@@ -86,7 +86,6 @@ contains
           if (isOutputTrj) call outputPDB(unit_outPDB, PDB, A_snapshot, iconf)
           print*,"Conf NO:", iconf 
       enddo
-      111 close(unit_outPDB)
       A_snapshot%n_confs = iconf
       write(*,'("#Number of conformation ",i8)') A_snapshot%n_confs 
   end subroutine
