@@ -1,42 +1,33 @@
 program main
+    use variables
+    !use arg_parse
     use Convert_trj_PDB !,only : read_pdb, readtrj 
     implicit none
     real(8) :: t1, t2
+    type(var_PDB) :: Ref
+    type(var_Trj) :: Trj
     character(len=100) :: file_ref 
     character(len=100) :: file_trj
 
     call cpu_time(t1)
-    !????????  Caution  ????????  
-    !This main and Convert_trj_PDB share the follow variables!!!
-    print*, "Input the number of atoms"
-    read(*,*) n_atoms
-    print*, "Input the number of residues"
-    read(*,*) n_residues 
-    print*, "Input the number of chains"
-    read(*,*) n_chains 
-    print*, "Input cell size" 
-    read(*,*) cellsize(1:3) 
-    !??????????????????????????????????????????????????
 
-    print*, "Input a file name of a reference PDB"
+    !call argument_parse()
+    print*, "*No. of atoms    :"
+    read(*,*) Ref%n_atoms
+    print*, "*No. of residues :"
+    read(*,*) Ref%n_residues 
+    print*, "*No. of chains   :"
+    read(*,*) Ref%n_chains 
+    print*, "*Cell size       :" 
+    read(*,*) Trj%cellsize(1:3) 
+    print*, "*Reference PDB   :"
     read(*,"(a120)") file_ref
-    print*, "Input a file name of a trajectory"
+    print*, "*Trajectory file :"
     read(*,"(a120)") file_trj
- 
-    call read_pdb(file_ref)
-    call readtrj(file_trj)
-!    do iatom = 1, n_atoms 
-!      write(10,"(a6,i5,1x,a4,1x,a3,1x,a1,i4,4x,3f8.3,a26)") &
-!        "ATOM  ", &
-!        AtomNum(iatom), &
-!        AtomName(iatom),&
-!        ResName(iatom),&
-!        ChainId(iatom), &
-!        ResNum(iatom), &
-!        x(iatom), y(iatom), z(iatom),&
-!        blnk
-!    enddo
-!    write(10,"(a6)") "ENDMDL"
+
+    call read_pdb(file_ref, Ref)
+    call outputPDB(12,Ref)
+    call analyze_trj(file_trj, Ref, Trj, .false.)
 
     call cpu_time(t2)
     print*, "CPU TIME: ", t2 - t1

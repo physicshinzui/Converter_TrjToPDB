@@ -1,5 +1,16 @@
-FC = gfortran
+FC=gfortran
 
-.SUFFIXES: .f03
+OBJS= main.o
 
-apply_pbc.mod: apply_pbc.f03
+MODS=apply_pbc.mod convert_trj_pdb.mod
+
+.SUFFIXES:.o .f03
+.f03.o:
+	$(FC) -c $< $(OBJS)
+.SUFFIXES:.mod.f03
+.f03.mod:
+	$(FC) -c $< $(MODS)
+
+$(TARGET):$(OBJS)
+	$(FC) -o $@ $(OBJS)
+
