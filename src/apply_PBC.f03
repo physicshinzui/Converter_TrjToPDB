@@ -29,7 +29,7 @@ contains
     logical :: judge
     integer :: iresidue, jj, n_residues
     integer :: imove(3)
-    integer :: NonProtorudedResidueNo
+    integer :: NonProtorudingResidueNo
     integer :: iatmst, iatmen
     integer,intent(in) :: n_atoms
     integer :: nchain
@@ -71,8 +71,8 @@ contains
       !***Detection of non-protoruded residue Number
       judge = all(imove == 0 ) !If all of imove components are 0, return true. 
       if (judge .eqv. .true.) then 
-        NonProtorudedResidueNo = iresidue 
-        !print*,"Protoruded residue is",  NonProtorudedResidueNo
+        NonProtorudingResidueNo = iresidue 
+        !print*,"Protoruding residue is",  NonProtorudingResidueNo
       endif
 
     enddo
@@ -86,17 +86,17 @@ contains
     !which did not go beyond a box.
 
     !***peptide system only 
-    ilandmark(1)   = NonProtorudedResidueNo
-    iChainStart(1) = 1 
-    iChainEnd(1)   = n_residues 
+    !ilandmark(1)   = NonProtorudingResidueNo
+    !iChainStart(1) = 1 
+    !iChainEnd(1)   = n_residues 
 
     !**For ET1
-    !ilandmark(1) = 5
-    !ilandmark(2) = NonProtorudedResidueNo
-    !iChainStart(1) = 1 
-    !iChainStart(2) = 21 
-    !iChainEnd(1) = 20
-    !iChainEnd(2) = 40
+    ilandmark(1) = 5
+    ilandmark(2) = 106 !NonProtorudingResidueNo
+
+    iChainStart(2) = 95 
+    iChainEnd(1) =94 
+    iChainEnd(2) = 113
     
     !***new
     imove(:) = 0

@@ -5,7 +5,7 @@ program main
     implicit none
     real(8) :: t1, t2
     type(var_PDB) :: Ref
-    type(var_Trj) :: Trj
+    type(var_snapshot) :: Trj
     character(len=100) :: file_ref 
     character(len=100) :: file_trj
 
@@ -26,9 +26,12 @@ program main
     read(*,"(a120)") file_trj
 
     call read_pdb(file_ref, Ref)
-    call outputPDB(12,Ref)
-    call analyze_trj(file_trj, Ref, Trj, .false.)
+    call outputPDB(14,Ref)
+
+!    stop
+    call analyze_trj(file_trj, Ref, Trj, .true.)
+    !call analyze_trj(file_trj, Ref, Trj, .false.)
 
     call cpu_time(t2)
-    print*, "CPU TIME: ", t2 - t1
+    print*, "CPU TIME (sec): ", t2 - t1
 end program

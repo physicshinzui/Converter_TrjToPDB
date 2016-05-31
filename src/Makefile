@@ -1,31 +1,32 @@
 FC=gfortran
-#CFLAGS = -Wall -O2
+CFLAGS = -Wall -O2 -fbounds_check
 
-OBJS = variables.o \
-       apply_pbc.o \
-       convert_trj_pdb.o \
-       main.o 
+#***name of program and objects
+PROGRAM = converter
+OBJS    = variables.o \
+          apply_pbc.o \
+          convert_trj_pdb.o \
+          main.o 
 
-EXEC = converter
 
-all: $(EXEC) 
+#.SUFFIXES: %.o %.f90
+#*.o: *.f03
+#	$(FC) -c $<
+#***Making program
+$(PROGRAM): $(OBJS)
+	$(FC) -o $@ $^
 
-variables.o:  variables.f03
-	$(FC) -c variables.f03
-apply_pbc.o:  apply_pbc.f03
-	$(FC) -c apply_pbc.f03
-convert_trj_pdb.o: convert_trj_pdb.f03
-	$(FC) -c convert_trj_pdb.f03
-main.o: main.f03
-	$(FC) -c main.f03 
 
-#.f03.o:
-#	$(FC) -c $< $(OBJS)
-
-$(EXEC):$(OBJS)
-	$(FC) -o $@ $(OBJS)
-
+variables.o: variables.f03 
+	$(FC) -c $<
+apply_pbc.o: apply_PBC.f03 
+	$(FC) -c $<
+convert_trj_pdb.o: Convert_trj_pdb.f03 
+	$(FC) -c $< 
+main.o: main.f03 
+	$(FC) -c $<
+#
 .PHONY:clean
 clean:
-	rm *.o *.mod
+	rm $(OBJS) $(PROGRAM) *.mod
 

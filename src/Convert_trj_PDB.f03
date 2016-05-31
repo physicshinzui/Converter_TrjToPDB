@@ -2,11 +2,29 @@ module Convert_trj_PDB
   use variables 
   implicit none
 
+  private count_atomtype
   public  read_pdb
   public  analyze_trj 
-!  private outputPDB
+  public  outputPDB
 
 contains
+  
+  subroutine count_atomtype(PDB, atomtype)
+    type(var_PDB), intent(in)    :: PDB
+    character(len=*), intent(in) :: atomtype
+    integer :: iatom, icount
+
+    icount = 0
+    do iatom = 1, PDB%n_atoms
+      if (trim(adjustl(PDB%AtomName(iatom))) == atomtype) then 
+        !print*, len_trim(adjustl(PDB%AtomName(iatom))), trim(PDB%AtomName(iatom))
+        print*, PDB%ResNum(iatom), PDB%AtomName(iatom)
+        icount = icount + 1
+      endif
+    enddo
+    print*, "No of CA=", icount
+
+  end subroutine
 
   subroutine read_pdb(FilName, PDB)
     type(var_PDB), intent(inout) :: PDB 
@@ -51,55 +69,62 @@ contains
            if (atom == "TER") stop "TER lines are included, remove these."
     enddo
     close(FilUnit)
+    !call count_atomtype(PDB,"CA")
+
   end subroutine
 
 !------------------------------------------------------
   subroutine analyze_trj(filename, PDB, A_snapshot, isOutputTrj)
       use apply_PBC 
       implicit none
-      type(var_PDB), intent(inout)   :: PDB 
-      type(var_Trj), intent(inout)   :: A_snapshot
+      type(var_PDB), intent(inout)      :: PDB 
+      type(var_snapshot), intent(inout) :: A_snapshot
       logical, optional :: isOutputTrj
       character(len=*) :: filename
       integer    :: unit = 11, unit_outPDB = 10
-      integer    :: ios, iatom, iconf
+      integer    :: ios, iatom, n_confs
       integer(4) :: istp,iyn15v,iyn15h
       real(4)    :: sitime, sec, et, kinetic, temperature, rmsf, rmsd 
-      if (.not. present(isOutputTrj)) isOutputTrj = .false.
 
+      !***default of isOutputTrj  is .false.
+      if (.not. present(isOutputTrj)) isOutputTrj = .false.
   
       open(unit, file = filename, form="unformatted", status="old")
       allocate(A_snapshot%x(PDB%n_atoms),A_snapshot%y(PDB%n_atoms),A_snapshot%z(PDB%n_atoms))
       
       !***Initialization
-      iconf = 0; A_snapshot%x(:) = 0; A_snapshot%y(:) = 0; A_snapshot%z(:) = 0
+      A_snapshot%iconf = 0; A_snapshot%x(:) = 0; A_snapshot%y(:) = 0; A_snapshot%z(:) = 0
       
       call prepare_apply_PBC(PDB%n_atoms,PDB%ResNum,PDB%n_residues)
-      !***Reading trajectory
+
+      !***Analyzing trajectory
       do 
           read(unit, iostat=ios) istp,sitime,sec,et,kinetic,temperature,&
                               A_snapshot%potential,rmsf,iyn15v,iyn15h,rmsd
           if (ios /= 0) exit
           read(unit) (A_snapshot%x(iatom), A_snapshot%y(iatom), A_snapshot%z(iatom), iatom = 1, PDB%n_atoms)
-          iconf = iconf + 1
+
+          A_snapshot%iconf = A_snapshot%iconf + 1
+
           call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, A_snapshot%cellsize)
-          if (isOutputTrj) call outputPDB(unit_outPDB, PDB, A_snapshot, iconf)
-          print*,"Conf NO:", iconf 
+
+          if (isOutputTrj) call outputPDB(unit_outPDB, PDB, A_snapshot)
+
+          print*,"Conf NO:", A_snapshot%iconf 
       enddo
-      A_snapshot%n_confs = iconf
-      write(*,'("#Number of conformation ",i8)') A_snapshot%n_confs 
+      n_confs = A_snapshot%iconf
+      write(*,'("#Number of conformation ",i8)') n_confs 
   end subroutine
-!
-  subroutine outputPDB(unit, PDB, a_snapshot, iconf)
+
+  subroutine outputPDB(unit, PDB, a_snapshot)
       integer      , intent(in) :: unit 
       integer :: i
       type(var_PDB), intent(in) :: PDB 
-      type(var_Trj), optional, intent(in) :: a_snapshot 
-      integer, optional, intent(in) :: iconf
+      type(var_snapshot), optional, intent(in) :: a_snapshot 
 
       if (present(a_snapshot)) then 
-          open(unit, file ="frames.pdb")!, status="replace")
-          write(unit,"('MODEL', i7)") iconf
+          open(unit, file ="frames.pdb")
+          write(unit,"('MODEL', i7)") a_snapshot%iconf
           write(unit,"('#Potential, kcal/mol ', f10.3)") a_snapshot%potential 
           do i = 1, PDB%n_atoms 
             write(unit,"(a6,i5,1x,a4,1x,a3,1x,a1,i4,4x,3f8.3,a26)") &
@@ -114,7 +139,7 @@ contains
           enddo
           write(unit,"(a6)") "ENDMDL"
       else
-          open(unit, file ="Reference.pdb")!, status="replace")
+          open(unit, file ="Reference.pdb", status="replace")
           do i = 1, PDB%n_atoms 
             write(unit,"(a6,i5,1x,a4,1x,a3,1x,a1,i4,4x,3f8.3,a26)") &
               "ATOM  ", &

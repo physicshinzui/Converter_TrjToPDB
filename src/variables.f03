@@ -11,10 +11,10 @@ module variables
         character(len=126) :: blnk=""
     end type
 
-    type var_trj
+    type var_snapshot
         real(4) :: potential
         real(4), allocatable   :: x(:), y(:), z(:)
-        integer :: n_confs
+        integer :: iconf
         real(8) :: cellsize(3)
     end type
 
