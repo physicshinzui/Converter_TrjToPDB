@@ -91,13 +91,31 @@ contains
     !iChainEnd(1)   = n_residues 
 
     !**For ET1
-    ilandmark(1) = 5
-    ilandmark(2) = 106 !NonProtorudingResidueNo
+    !ilandmark(1) = 5
+    !ilandmark(2) = 106 !NonProtorudingResidueNo
 
-    iChainStart(2) = 95 
-    iChainEnd(1) =94 
-    iChainEnd(2) = 113
+    !***For S100B-CTD 
+    !ilandmark(1) = 5
+    !ilandmark(2) = 106 !NonProtorudingResidueNo
+    !iChainStart(1) = 1 
+    !iChainStart(2) = 95 
+    !iChainEnd(1) = 94 
+    !iChainEnd(2) = 113
     
+    ilandmark(1) = 70
+    ilandmark(2) = 237 
+    ilandmark(3) = 350 
+    ilandmark(4) = 480 
+    iChainStart(1) = 1 
+    iChainStart(2) = 233
+    iChainStart(3) = 243
+    iChainStart(4) = 475
+    iChainEnd(1) = 232
+    iChainEnd(2) = 242
+    iChainEnd(3) = 474
+    iChainEnd(4) = 484
+
+
     !***new
     imove(:) = 0
 

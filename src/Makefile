@@ -1,5 +1,5 @@
 FC=gfortran
-CFLAGS = -Wall -O2 -fbounds_check
+CFLAGS = -Wall -O2 -fbounds-check
 
 #***name of program and objects
 PROGRAM = converter
@@ -12,9 +12,10 @@ OBJS    = variables.o \
 #.SUFFIXES: %.o %.f90
 #*.o: *.f03
 #	$(FC) -c $<
+
 #***Making program
 $(PROGRAM): $(OBJS)
-	$(FC) -o $@ $^
+	$(FC) -o $@ $^ $(CFLAGS) 
 
 
 variables.o: variables.f03 

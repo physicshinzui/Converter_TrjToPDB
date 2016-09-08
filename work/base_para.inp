@@ -1,0 +1,20 @@
+.true.
+4658
+484
+4
+109.7202 79.94783 94.96993
+/Users/siida/1.pdb
+TRAJ_DATA
+TRAJ_OUT_NAME
+
+
+
+###USAGE###
+1. .false. or .true.
+2. no of atoms 
+3. no of residues
+4. no of chains
+5. cel size (x,y,z)
+6. reference pdb
+7. a path of trajectory file
+8. output file name of the PDB transformed from trajecotory file

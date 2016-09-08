@@ -6,12 +6,15 @@ program main
     real(8) :: t1, t2
     type(var_PDB) :: Ref
     type(var_snapshot) :: Trj
-    character(len=100) :: file_ref 
+    character(len=100) :: file_ref
     character(len=100) :: file_trj
+    character(len=100) :: fnameOut
+    logical :: IsOutput
 
     call cpu_time(t1)
 
-    !call argument_parse()
+    print*, "*Output?"
+    read(*,*) IsOutput
     print*, "*No. of atoms    :"
     read(*,*) Ref%n_atoms
     print*, "*No. of residues :"
@@ -24,13 +27,15 @@ program main
     read(*,"(a120)") file_ref
     print*, "*Trajectory file :"
     read(*,"(a120)") file_trj
+    if (IsOutput) then 
+        print*,"*Trajectory output:", IsOutput
+        read(*,*) fnameOut
+        print*,"*Output file Name :", fnameOut
+    endif
 
     call read_pdb(file_ref, Ref)
-    call outputPDB(14,Ref)
 
-!    stop
-    call analyze_trj(file_trj, Ref, Trj, .true.)
-    !call analyze_trj(file_trj, Ref, Trj, .false.)
+    call analyze_trj(file_trj, fnameOut, Ref, Trj, IsOutput)
 
     call cpu_time(t2)
     print*, "CPU TIME (sec): ", t2 - t1

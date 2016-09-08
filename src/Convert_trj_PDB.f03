@@ -74,13 +74,13 @@ contains
   end subroutine
 
 !------------------------------------------------------
-  subroutine analyze_trj(filename, PDB, A_snapshot, isOutputTrj)
+  subroutine analyze_trj(filename,fnameOut, PDB, A_snapshot, isOutputTrj)
       use apply_PBC 
       implicit none
       type(var_PDB), intent(inout)      :: PDB 
       type(var_snapshot), intent(inout) :: A_snapshot
       logical, optional :: isOutputTrj
-      character(len=*) :: filename
+      character(len=*) :: filename, fnameOut
       integer    :: unit = 11, unit_outPDB = 10
       integer    :: ios, iatom, n_confs
       integer(4) :: istp,iyn15v,iyn15h
@@ -106,9 +106,9 @@ contains
 
           A_snapshot%iconf = A_snapshot%iconf + 1
 
-          call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, A_snapshot%cellsize)
+ !         call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, A_snapshot%cellsize)
 
-          if (isOutputTrj) call outputPDB(unit_outPDB, PDB, A_snapshot)
+          if (isOutputTrj) call outputPDB(unit_outPDB,fnameOut, PDB, A_snapshot)
 
           print*,"Conf NO:", A_snapshot%iconf 
       enddo
@@ -116,17 +116,35 @@ contains
       write(*,'("#Number of conformation ",i8)') n_confs 
   end subroutine
 
-  subroutine outputPDB(unit, PDB, a_snapshot)
+  subroutine DetectStrangeCoord(coords, threshold)
+    real(4), intent(in)  :: coords(3)
+    real(4), optional :: threshold
+
+    if ( .not. present(threshold)) then 
+      threshold = 100.0
+      print*, "Threshold=", threshold
+    endif
+
+    if (coords(1) >= threshold .or. coords(2) >= threshold .or. coords(3) >= threshold) then
+      print*, "STOP because coordinates are too big to realize PDB format."
+      print*, "Coordinates=", coords, "   Threshold=", threshold
+      stop
+    endif
+  end subroutine 
+
+  subroutine outputPDB(unit, fnameOut, PDB, a_snapshot)
       integer      , intent(in) :: unit 
+      character(len=*), intent(in) :: fnameOut !@
       integer :: i
       type(var_PDB), intent(in) :: PDB 
       type(var_snapshot), optional, intent(in) :: a_snapshot 
-
+      logical :: IsCorrect
       if (present(a_snapshot)) then 
-          open(unit, file ="frames.pdb")
+          open(unit, file = fnameOut) ! "frames.pdb")
           write(unit,"('MODEL', i7)") a_snapshot%iconf
           write(unit,"('#Potential, kcal/mol ', f10.3)") a_snapshot%potential 
           do i = 1, PDB%n_atoms 
+            call DetectStrangeCoord( (/a_snapshot%x(i), a_snapshot%y(i), a_snapshot%z(i)/),threshold=200.0)
             write(unit,"(a6,i5,1x,a4,1x,a3,1x,a1,i4,4x,3f8.3,a26)") &
               "ATOM  ", &
               PDB%AtomNum(i), &
@@ -139,7 +157,7 @@ contains
           enddo
           write(unit,"(a6)") "ENDMDL"
       else
-          open(unit, file ="Reference.pdb", status="replace")
+          open(unit, file =fnameOut, status="replace")
           do i = 1, PDB%n_atoms 
             write(unit,"(a6,i5,1x,a4,1x,a3,1x,a1,i4,4x,3f8.3,a26)") &
               "ATOM  ", &
