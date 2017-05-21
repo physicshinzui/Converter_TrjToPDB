@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rm para*
+rm para* log* frame*

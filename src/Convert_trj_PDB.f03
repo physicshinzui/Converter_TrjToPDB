@@ -37,8 +37,14 @@ contains
   
     open(FilUnit, file=FilName, status="old")
     print*,"  File Name: ",FilName
-    allocate(PDB%AtomNum(PDB%n_atoms),PDB%AtomName(PDB%n_atoms),PDB%ResName(PDB%n_atoms), &
-             PDB%ChainId(PDB%n_atoms),PDB%ResNum(PDB%n_atoms),PDB%x(PDB%n_atoms),PDB%y(PDB%n_atoms),PDB%z(PDB%n_atoms))
+    allocate(PDB%AtomNum(PDB%n_atoms) , & 
+             PDB%AtomName(PDB%n_atoms), & 
+             PDB%ResName(PDB%n_atoms) , &
+             PDB%ChainId(PDB%n_atoms) , &
+             PDB%ResNum(PDB%n_atoms)  , & 
+             PDB%x(PDB%n_atoms)       , & 
+             PDB%y(PDB%n_atoms)       , & 
+             PDB%z(PDB%n_atoms) )
     PDB%AtomNum(:) = 0
     PDB%ResNum(:)  = 0
     PDB%x(:) = 0; PDB%y(:) = 0; PDB%z(:) = 0
@@ -77,14 +83,19 @@ contains
   subroutine analyze_trj(filename,fnameOut, PDB, A_snapshot, isOutputTrj)
       use apply_PBC 
       implicit none
-      type(var_PDB), intent(inout)      :: PDB 
+      type(var_PDB)     , intent(inout) :: PDB 
       type(var_snapshot), intent(inout) :: A_snapshot
-      logical, optional :: isOutputTrj
-      character(len=*) :: filename, fnameOut
-      integer    :: unit = 11, unit_outPDB = 10
-      integer    :: ios, iatom, n_confs
-      integer(4) :: istp,iyn15v,iyn15h
-      real(4)    :: sitime, sec, et, kinetic, temperature, rmsf, rmsd 
+      logical           , optional      :: isOutputTrj
+      character(len=*)                  :: filename, fnameOut
+      integer                           :: unit = 11, unit_outPDB = 10
+      integer                           :: ios, iatom, n_confs
+
+      integer(4)                        :: istp,iyn15v,iyn15h
+      real(4)                           :: sitime, sec, et, kinetic, temperature, rmsf, rmsd 
+
+      !***for coordinated in a restart file
+      double precision, allocatable :: cord(:,:)
+
 
       !***default of isOutputTrj  is .false.
       if (.not. present(isOutputTrj)) isOutputTrj = .false.
@@ -100,20 +111,38 @@ contains
       !***Analyzing trajectory
       do 
           read(unit, iostat=ios) istp,sitime,sec,et,kinetic,temperature,&
-                              A_snapshot%potential,rmsf,iyn15v,iyn15h,rmsd
+                                 A_snapshot%potential,rmsf,iyn15v,iyn15h,rmsd
           if (ios /= 0) exit
           read(unit) (A_snapshot%x(iatom), A_snapshot%y(iatom), A_snapshot%z(iatom), iatom = 1, PDB%n_atoms)
 
+          !@@@@ for restart file
+!          allocate(cord(1:3,PDB%n_atoms))
+!          read(unit)
+!          read(unit)
+!          read(unit)
+!          read(unit) (cord(1:3,iatom),iatom=1,PDB%n_atoms)
+!          print*, "double precision : ", cord(1,1)
+!          A_snapshot%x(:) = real(cord(1,:))
+!          A_snapshot%y(:) = real(cord(2,:))
+!          A_snapshot%z(:) = real(cord(3,:))
+!          print*, "signle precision : ", A_snapshot%x(1)
+          !@@@@
+
+          print*, "step no:", istp, "Potential=", A_snapshot%potential
+ 
           A_snapshot%iconf = A_snapshot%iconf + 1
 
- !         call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, A_snapshot%cellsize)
+          call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, & 
+                          A_snapshot%cellsize,PDB%ResNum)
 
           if (isOutputTrj) call outputPDB(unit_outPDB,fnameOut, PDB, A_snapshot)
 
           print*,"Conf NO:", A_snapshot%iconf 
       enddo
+
       n_confs = A_snapshot%iconf
       write(*,'("#Number of conformation ",i8)') n_confs 
+
   end subroutine
 
   subroutine DetectStrangeCoord(coords, threshold)
@@ -142,7 +171,7 @@ contains
       if (present(a_snapshot)) then 
           open(unit, file = fnameOut) ! "frames.pdb")
           write(unit,"('MODEL', i7)") a_snapshot%iconf
-          write(unit,"('#Potential, kcal/mol ', f10.3)") a_snapshot%potential 
+          write(unit,"('#Potential, kcal/mol ', f13.3)") a_snapshot%potential 
           do i = 1, PDB%n_atoms 
             call DetectStrangeCoord( (/a_snapshot%x(i), a_snapshot%y(i), a_snapshot%z(i)/),threshold=200.0)
             write(unit,"(a6,i5,1x,a4,1x,a3,1x,a1,i4,4x,3f8.3,a26)") &

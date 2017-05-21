@@ -1,10 +1,8 @@
 #!/bin/bash
 
-set -e
+N=180
 
-N=20 
-
-for i in $(seq 0 $N); do
+for i in $(seq 1 $N); do
   echo "No. : "$i
   ../src/converter < para$i.inp > log$i
 done
