@@ -1,6 +1,4 @@
-# Converter_TrjToPDB
+# Converter: Presto-formatted trajectories into PDB frames 
 
-This program converts trajectory in psygene into PDB frames.
+This program converts presto-formatted trajectories into PDB frames.
 
-2017-2-21
-This program does not assume that center of mass of a chain is fixed.
