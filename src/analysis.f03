@@ -1,5 +1,7 @@
-module Convert_trj_PDB 
+module analysis
+!module Convert_trj_PDB 
   use variables 
+  use assignment_prob
   implicit none
 
   private count_atomtype
@@ -80,11 +82,13 @@ contains
   end subroutine
 
 !------------------------------------------------------
-  subroutine analyze_trj(filename,fnameOut, PDB, A_snapshot, isOutputTrj)
+  subroutine analyze_trj(filename,fnameOut,f_name_prob_dist, PDB, A_snapshot, isOutputTrj)
+  !subroutine analyze_trj(filename,fnameOut, PDB, A_snapshot, isOutputTrj)
       use apply_PBC 
       implicit none
       type(var_PDB)     , intent(inout) :: PDB 
       type(var_snapshot), intent(inout) :: A_snapshot
+      character(len=*)  , optional      :: f_name_prob_dist
       logical           , optional      :: isOutputTrj
       character(len=*)                  :: filename, fnameOut
       integer                           :: unit = 11, unit_outPDB = 10
@@ -93,11 +97,13 @@ contains
       integer(4)                        :: istp,iyn15v,iyn15h
       real(4)                           :: sitime, sec, et, kinetic, temperature, rmsf, rmsd 
 
-      !***for coordinated in a restart file
-      double precision, allocatable :: cord(:,:)
+      
+      !@@@
+      integer :: ncount !!<= temp
+      real(8), allocatable :: energy(:), pdf(:)
+      real(8) :: random
 
-
-      !***default of isOutputTrj  is .false.
+      !***default of isOutputTrj is .false.
       if (.not. present(isOutputTrj)) isOutputTrj = .false.
   
       open(unit, file = filename, form="unformatted", status="old")
@@ -108,6 +114,8 @@ contains
       
       call prepare_apply_PBC(PDB%n_atoms,PDB%ResNum,PDB%n_residues)
 
+      call read_pdf(f_name_prob_dist, energy, pdf)
+
       !***Analyzing trajectory
       do 
           read(unit, iostat=ios) istp,sitime,sec,et,kinetic,temperature,&
@@ -115,33 +123,35 @@ contains
           if (ios /= 0) exit
           read(unit) (A_snapshot%x(iatom), A_snapshot%y(iatom), A_snapshot%z(iatom), iatom = 1, PDB%n_atoms)
 
-          !@@@@ for restart file
-!          allocate(cord(1:3,PDB%n_atoms))
-!          read(unit)
-!          read(unit)
-!          read(unit)
-!          read(unit) (cord(1:3,iatom),iatom=1,PDB%n_atoms)
-!          print*, "double precision : ", cord(1,1)
-!          A_snapshot%x(:) = real(cord(1,:))
-!          A_snapshot%y(:) = real(cord(2,:))
-!          A_snapshot%z(:) = real(cord(3,:))
-!          print*, "signle precision : ", A_snapshot%x(1)
-          !@@@@
-
-          print*, "step no:", istp, "Potential=", A_snapshot%potential
- 
+          !???Should this variable be set in the struct, A_snapshot? I do not think so. 
           A_snapshot%iconf = A_snapshot%iconf + 1
 
+
+          call assign_pdf(energy, pdf, A_snapshot%potential, A_snapshot%prob)
+
+          !@@@Variables for "ReturnAtom" can be shrunk like "ReturnAtom(PDB, A_snapshot)"
+          !@@@This is more readable and less complicated variables.
           call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, & 
                           A_snapshot%cellsize,PDB%ResNum)
 
-          if (isOutputTrj) call outputPDB(unit_outPDB,fnameOut, PDB, A_snapshot)
+          print*,"Conf NO: ", A_snapshot%iconf 
+          print*,"  *step no    = ", istp
+          print*,"  *Potential  = ", A_snapshot%potential
+          print*,"  *Probability= ", A_snapshot%prob
 
-          print*,"Conf NO:", A_snapshot%iconf 
+
+          !***This is a criteria for taking structures in a multicanonical emsemble.
+          call random_number(random)
+          if (isOutputTrj .and. A_snapshot%prob >= random) then 
+            call outputPDB(unit_outPDB,fnameOut, PDB, A_snapshot)
+            print*, "  *This conf. is stored in canonical ensemble."
+            print*, "    ", A_snapshot%prob, " >= ", random 
+          endif
+
       enddo
 
       n_confs = A_snapshot%iconf
-      write(*,'("#Number of conformation ",i8)') n_confs 
+      write(*,'("#Number of conformations ",i8)') n_confs 
 
   end subroutine
 

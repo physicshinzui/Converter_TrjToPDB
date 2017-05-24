@@ -1,18 +1,20 @@
 program main
     use variables
-    use Convert_trj_PDB !,only : read_pdb, readtrj 
+    use analysis !,only : read_pdb, readtrj 
+    !use Convert_trj_PDB !,only : read_pdb, readtrj 
     implicit none
     real(8) :: t1, t2
-    type(var_PDB) :: Ref
+    type(var_PDB)      :: Ref
     type(var_snapshot) :: Trj
     character(len=100) :: file_ref
     character(len=100) :: file_trj
     character(len=100) :: fnameOut
+    character(len=100) :: file_prob_distrib
     logical :: IsOutput
 
     call cpu_time(t1)
 
-    print*, "*Output?"
+    print*, "*Is pdb frames generated? ('.true.' or '.false.') "
     read(*,*) IsOutput
 
     print*, "*No. of atoms    :"
@@ -39,6 +41,9 @@ program main
     print*, "*Trajectory file :"
     read(*,"(a120)") file_trj
 
+    print*, "*probability distribution file :"
+    read(*,"(a120)") file_prob_distrib
+
     if (IsOutput) then 
         print*,"*Trajectory output:", IsOutput
         read(*,*) fnameOut
@@ -47,7 +52,7 @@ program main
 
     call read_pdb(file_ref, Ref)
 
-    call analyze_trj(file_trj, fnameOut, Ref, Trj, IsOutput)
+    call analyze_trj(file_trj, fnameOut, file_prob_distrib , Ref, Trj, IsOutput)
 
     call cpu_time(t2)
     print*, "CPU TIME (sec): ", t2 - t1

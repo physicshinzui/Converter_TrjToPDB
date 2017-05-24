@@ -13,6 +13,7 @@ module variables
 
     type var_snapshot
         real(4) :: potential
+        real(8) :: prob
         real(4), allocatable   :: x(:), y(:), z(:)
         integer :: iconf
         real(8) :: cellsize(3)
