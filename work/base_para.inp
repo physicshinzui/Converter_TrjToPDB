@@ -5,6 +5,7 @@
 68.88114 68.88114 68.88114
 npt_1.pdb
 TRAJ_DATA
+../gen_p_cano_McMD/p_cano/P_E_T400.dat
 TRAJ_OUT_NAME
 
 
