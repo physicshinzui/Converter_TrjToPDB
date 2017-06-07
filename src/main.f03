@@ -6,10 +6,10 @@ program main
     real(8) :: t1, t2
     type(var_PDB)      :: Ref
     type(var_snapshot) :: Trj
-    character(len=100) :: file_ref
-    character(len=100) :: file_trj
-    character(len=100) :: fnameOut
-    character(len=100) :: file_prob_distrib
+    character(len=150) :: file_ref
+    character(len=150) :: file_trj
+    character(len=150) :: fnameOut
+    character(len=150) :: file_prob_distrib
     logical :: IsOutput
 
     call cpu_time(t1)

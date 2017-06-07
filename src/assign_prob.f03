@@ -57,7 +57,7 @@ contains
     do i = 1, ncount
       pdf(i) = exp(pdf(i) - MaxPDF)
       if (pdf(i) <= LowLimit) pdf(i) = 0.0d0
-      write(1111, *) energy(i), pdf(i)
+      !write(1111, *) energy(i), pdf(i)
     enddo
 
     close(UnitPDF)

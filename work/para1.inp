@@ -4,9 +4,9 @@
 2
 68.88114 68.88114 68.88114
 npt_1.pdb
-TRAJ_DATA
+/Users/siida/data_s100b_ctd_cod/whole_md_md35-md38.cod
 ../gen_p_cano_McMD/p_cano/P_E_T300.dat
-TRAJ_OUT_NAME
+frame1.pdb
 
 
 

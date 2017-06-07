@@ -1,11 +1,11 @@
 .true.
-1694
-110
-2
-68.88114 68.88114 68.88114
-npt_1.pdb
+305
+19
+1
+49.13128 49.13128 49.13128
+/Volumes/data_shinji/s100b_ctd_study/data_NonAcHIsNeutral_md9_singleCTD/all_md.pdb
 TRAJ_DATA
-../gen_p_cano_McMD/p_cano/P_E_T300.dat
+/Volumes/data_shinji/s100b_ctd_study/data_NonAcHIsNeutral_md9_singleCTD/p_cano_NonAc_HIS_Neutral/P_E_T300.dat
 TRAJ_OUT_NAME
 
 
