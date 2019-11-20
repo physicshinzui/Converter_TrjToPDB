@@ -12,17 +12,17 @@ program main
 
     call cpu_time(t1)
 
-    print*, "*No. of atoms    :"
+    write(*, fmt="(a)", advance="no") "*No. of atoms     :"
     read(*,*) Ref%n_atoms
 
-    print*, "*Reference PDB   :"
+    write(*, fmt="(a)", advance="no") "*Reference PDB    :"
     read(*,"(a120)") file_ref
 
-    print*, "*Trajectory file :"
+    write(*, fmt="(a)", advance="no") "*Trajectory file  :"
     read(*,"(a120)") file_trj
 
+    write(*, fmt="(a)", advance="no") "*Output file Name :"
     read(*,*) fnameOut
-    print*,"*Output file Name :", fnameOut
 
     call read_pdb(file_ref, Ref)
 
