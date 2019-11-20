@@ -1,4 +1,0 @@
-2017-02-22
-Fortran runtime error: Unformatted file structure has been corrupted
-
-Maybe, this means data have not written sufficiently in it yet.
