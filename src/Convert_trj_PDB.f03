@@ -106,7 +106,7 @@ contains
       !***Initialization
       A_snapshot%iconf = 0; A_snapshot%x(:) = 0; A_snapshot%y(:) = 0; A_snapshot%z(:) = 0
       
-      call prepare_apply_PBC(PDB%n_atoms,PDB%ResNum,PDB%n_residues)
+!      call prepare_apply_PBC(PDB%n_atoms,PDB%ResNum,PDB%n_residues)
 
       !***Analyzing trajectory
       do 
@@ -132,8 +132,8 @@ contains
  
           A_snapshot%iconf = A_snapshot%iconf + 1
 
-          call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, & 
-                          A_snapshot%cellsize,PDB%ResNum)
+!          call ReturnAtom(PDB%n_atoms,PDB%n_chains,PDB%n_residues,A_snapshot%x, A_snapshot%y, A_snapshot%z, & 
+!                          A_snapshot%cellsize,PDB%ResNum)
 
           if (isOutputTrj) call outputPDB(unit_outPDB,fnameOut, PDB, A_snapshot)
 

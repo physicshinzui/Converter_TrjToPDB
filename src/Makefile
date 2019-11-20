@@ -1,13 +1,11 @@
 FC=gfortran
 CFLAGS = -Wall -O2 -fbounds-check
 
-#***name of program and objects
 PROGRAM = converter
 OBJS    = variables.o \
           apply_pbc.o \
           convert_trj_pdb.o \
           main.o 
-
 
 #.SUFFIXES: %.o %.f90
 #*.o: *.f03
@@ -16,7 +14,6 @@ OBJS    = variables.o \
 #***Making program
 $(PROGRAM): $(OBJS)
 	$(FC) -o $@ $^ $(CFLAGS) 
-
 
 variables.o: variables.f03 
 	$(FC) -c $<

@@ -1,2 +1,5 @@
 *.mod
 *.o
+frame*.pdb
+log*
+para*.inp

@@ -1,13 +1,11 @@
 .true.
-1694
+22596
 110
-2
+1
 68.88114 68.88114 68.88114
-npt_1.pdb
+sample/npt_eq.pdb
 TRAJ_DATA
 TRAJ_OUT_NAME
-
-
 
 ###USAGE###
 1. .false. or .true.
