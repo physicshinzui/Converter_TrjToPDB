@@ -1,6 +1,5 @@
-# Converter_TrjToPDB
+# Converter from PRESTO coordinate file to PDB file.
 
-This program converts trajectory in psygene into PDB frames.
-
-2017-2-21
-This program does not assume that center of mass of a chain is fixed.
+## How to
+Usage:
+`src/converter < list.inp `

@@ -1,5 +1,5 @@
 GFORTRAN module version '10' created from Convert_trj_pdb.f03
-MD5:f47f3ad06d5143363c7345fa8e42db06 -- If you edit this, you'll get what you deserve.
+MD5:6b90af78e3bb86f9ed74299c9f4f6c12 -- If you edit this, you'll get what you deserve.
 
 (() () () () () () () () () () () () () () () () () () () () () () ()
 () () () ())
@@ -67,27 +67,27 @@ INTEGER ()) 0 '3')) (UNKNOWN-FL UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN
 UNKNOWN 0 0 DIMENSION) UNKNOWN-ACCESS ())) PUBLIC (() () () ()) () 0 0
 60571588)
 23 'analyze_trj' 'convert_trj_pdb' '' 1 ((PROCEDURE UNKNOWN-INTENT
-MODULE-PROC DECL UNKNOWN 0 0 SUBROUTINE ALWAYS_EXPLICIT) (UNKNOWN 0 0 0
-0 UNKNOWN ()) 24 0 (25 26 27 28 29) () 0 () () () 0 0)
-30 'convert_trj_pdb' 'convert_trj_pdb' '' 1 ((MODULE UNKNOWN-INTENT
+MODULE-PROC DECL UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 24
+0 (25 26 27 28) () 0 () () () 0 0)
+29 'convert_trj_pdb' 'convert_trj_pdb' '' 1 ((MODULE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (UNKNOWN 0 0 0 0 UNKNOWN ()) 0 0 () ()
 0 () () () 0 0)
-31 'detectstrangecoord' 'convert_trj_pdb' '' 1 ((PROCEDURE
+30 'detectstrangecoord' 'convert_trj_pdb' '' 1 ((PROCEDURE
 UNKNOWN-INTENT MODULE-PROC DECL UNKNOWN 0 0 SUBROUTINE ALWAYS_EXPLICIT)
-(UNKNOWN 0 0 0 0 UNKNOWN ()) 32 0 (33 34) () 0 () () () 0 0)
-35 'outputpdb' 'convert_trj_pdb' '' 1 ((PROCEDURE UNKNOWN-INTENT
+(UNKNOWN 0 0 0 0 UNKNOWN ()) 31 0 (32 33) () 0 () () () 0 0)
+34 'outputpdb' 'convert_trj_pdb' '' 1 ((PROCEDURE UNKNOWN-INTENT
 MODULE-PROC DECL UNKNOWN 0 0 SUBROUTINE ALWAYS_EXPLICIT) (UNKNOWN 0 0 0
-0 UNKNOWN ()) 36 0 (37 38 39 40) () 0 () () () 0 0)
-41 'read_pdb' 'convert_trj_pdb' '' 1 ((PROCEDURE UNKNOWN-INTENT
-MODULE-PROC DECL UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 42
-0 (43 44) () 0 () () () 0 0)
-45 'var_pdb' 'variables' '' 1 ((PROCEDURE UNKNOWN-INTENT UNKNOWN-PROC
+0 UNKNOWN ()) 35 0 (36 37 38 39) () 0 () () () 0 0)
+40 'read_pdb' 'convert_trj_pdb' '' 1 ((PROCEDURE UNKNOWN-INTENT
+MODULE-PROC DECL UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 41
+0 (42 43) () 0 () () () 0 0)
+44 'var_pdb' 'variables' '' 1 ((PROCEDURE UNKNOWN-INTENT UNKNOWN-PROC
 DECL UNKNOWN 0 0 FUNCTION GENERIC) (REAL 4 0 0 0 REAL ()) 0 0 () () 0 ()
 () () 0 0)
-46 'var_snapshot' 'variables' '' 1 ((PROCEDURE UNKNOWN-INTENT
+45 'var_snapshot' 'variables' '' 1 ((PROCEDURE UNKNOWN-INTENT
 UNKNOWN-PROC DECL UNKNOWN 0 0 FUNCTION GENERIC) (REAL 4 0 0 0 REAL ()) 0
 0 () () 0 () () () 0 0)
-47 'variables' 'variables' '' 1 ((MODULE UNKNOWN-INTENT UNKNOWN-PROC
+46 'variables' 'variables' '' 1 ((MODULE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN UNKNOWN 0 0) (UNKNOWN 0 0 0 0 UNKNOWN ()) 0 0 () () 0 () () () 0
 0)
 25 'filename' '' '' 24 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN
@@ -100,30 +100,27 @@ UNKNOWN 0 0 DUMMY) (CHARACTER 1 0 0 0 CHARACTER (())) 0 0 () () 0 () ()
 DUMMY) (DERIVED 2 0 0 0 DERIVED ()) 0 0 () () 0 () () () 0 0)
 28 'a_snapshot' '' '' 24 ((VARIABLE INOUT UNKNOWN-PROC UNKNOWN UNKNOWN 0
 0 DUMMY) (DERIVED 3 0 0 0 DERIVED ()) 0 0 () () 0 () () () 0 0)
-29 'isoutputtrj' '' '' 24 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN
-UNKNOWN 0 0 OPTIONAL DUMMY) (LOGICAL 4 0 0 0 LOGICAL ()) 0 0 () () 0 ()
-() () 0 0)
-33 'coords' '' '' 32 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+32 'coords' '' '' 31 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 DIMENSION DUMMY) (REAL 4 0 0 0 REAL ()) 0 0 () (1 0 EXPLICIT (CONSTANT (
 INTEGER 4 0 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0 0 INTEGER ())
 0 '3')) 0 () () () 0 0)
-34 'threshold' '' '' 32 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN
+33 'threshold' '' '' 31 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN
 UNKNOWN 0 0 OPTIONAL DUMMY) (REAL 4 0 0 0 REAL ()) 0 0 () () 0 () () ()
 0 0)
-37 'unit' '' '' 36 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY)
+36 'unit' '' '' 35 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY)
 (INTEGER 4 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
-38 'fnameout' '' '' 36 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+37 'fnameout' '' '' 35 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 DUMMY) (CHARACTER 1 0 0 0 CHARACTER (())) 0 0 () () 0 () () () 0 0)
-39 'pdb' '' '' 36 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY)
+38 'pdb' '' '' 35 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY)
 (DERIVED 2 0 0 0 DERIVED ()) 0 0 () () 0 () () () 0 0)
-40 'a_snapshot' '' '' 36 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+39 'a_snapshot' '' '' 35 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 OPTIONAL DUMMY) (DERIVED 3 0 0 0 DERIVED ()) 0 0 () () 0 () () () 0 0)
-43 'filname' '' '' 42 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+42 'filname' '' '' 41 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 DUMMY) (CHARACTER 1 0 0 0 CHARACTER (())) 0 0 () () 0 () () () 0 0)
-44 'pdb' '' '' 42 ((VARIABLE INOUT UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+43 'pdb' '' '' 41 ((VARIABLE INOUT UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 DUMMY) (DERIVED 2 0 0 0 DERIVED ()) 0 0 () () 0 () () () 0 0)
 )
 
 ('Var_pdb' 0 2 'Var_snapshot' 0 3 'analyze_trj' 0 23 'convert_trj_pdb' 0
-30 'detectstrangecoord' 0 31 'outputpdb' 0 35 'read_pdb' 0 41 'var_pdb'
-0 45 'var_snapshot' 0 46 'variables' 0 47)
+29 'detectstrangecoord' 0 30 'outputpdb' 0 34 'read_pdb' 0 40 'var_pdb'
+0 44 'var_snapshot' 0 45 'variables' 0 46)
